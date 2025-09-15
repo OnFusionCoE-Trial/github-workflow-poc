@@ -36,8 +36,8 @@ jobs:
       RUNNER_DEBUG: 1
 
     steps:
-    - name: Run Env
-      run: env
+    #- name: Run Env
+    #  run: env
 
     - uses: actions/checkout@v2
       with:
@@ -96,7 +96,7 @@ jobs:
       uses: microsoft/powerplatform-actions/branch-solution@v1
       with:
         solution-folder: solution/meta/
-        solution-target-folder: .build/${{ github.event.inputs.solution_name }}
+        solution-target-folder: /
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         allow-empty-commit: true
 
