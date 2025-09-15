@@ -1,4 +1,6 @@
 
+name: power platform poc
+
 on:
   workflow_dispatch:
     inputs:
