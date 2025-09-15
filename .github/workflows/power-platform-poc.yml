@@ -22,7 +22,7 @@ env:
   ENVIRONMENT_URL: ${{inputs.environment_url}}
   CLIENT_ID: ${{vars.DEBUG_ORG_4_CLIENT_ID}}
   TENANT_ID: ${{vars.DEBUG_ORG_4_TENANT_ID}}
-  CLIENT_SECRET: ${{vars.DEBUG_ORG_4_SECRET}}
+  CLIENT_SECRET: ${{secrets.DEBUG_ORG_4_SECRET}}
   MICROSOFT_CLOUD: ${{vars.DEBUG_ORG_4_TENANT_CLOUD}}  
 
 permissions:
