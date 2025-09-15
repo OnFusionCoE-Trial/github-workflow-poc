@@ -24,6 +24,7 @@ env:
   TENANT_ID: ${{vars.DEBUG_ORG_4_TENANT_ID}}
   CLIENT_SECRET: ${{vars.DEBUG_ORG_4_SECRET}}
   MICROSOFT_CLOUD: ${{vars.DEBUG_ORG_4_TENANT_CLOUD}}  
+  TEST_VAR: 'Test environment variable'
 
 permissions:
   contents: write
@@ -36,6 +37,14 @@ jobs:
       RUNNER_DEBUG: 1
 
     steps:
+    - name: Use variables
+      run: |
+        echo "Environment URL : $ENVIRONMENT_URL"
+        echo "Client ID : $CLIENT_ID"
+        echo "Tenant ID : $TENANT_ID"
+        echo "Microsoft Cloud : $MICROSOFT_CLOUD"
+        echo "Test var : $TEST_VAR"        
+
     - uses: actions/checkout@v2
       with:
         lfs: true
