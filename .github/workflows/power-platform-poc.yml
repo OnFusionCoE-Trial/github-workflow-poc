@@ -39,11 +39,10 @@ jobs:
     steps:
     - name: Use variables
       run: |
-        echo "Environment URL : $ENVIRONMENT_URL"
-        echo "Client ID : $CLIENT_ID"
-        echo "Tenant ID : $TENANT_ID"
-        echo "Microsoft Cloud : $MICROSOFT_CLOUD"
-        echo "Test var : $TEST_VAR"        
+        echo "Environment URL : ${{inputs.environment_url}}"
+        echo "Client ID : {{vars.DEBUG_ORG_4_CLIENT_ID}}"
+        echo "Tenant ID : ${{vars.DEBUG_ORG_4_TENANT_ID}}"
+        echo "Microsoft Cloud : ${{vars.DEBUG_ORG_4_TENANT_CLOUD}} "       
 
     - uses: actions/checkout@v2
       with:
