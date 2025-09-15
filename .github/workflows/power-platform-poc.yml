@@ -40,7 +40,7 @@ jobs:
     #  run: env
 
     - name: OnfusionCoe Dispatch
-      uses: fusioncoe/onfusioncoe-actions/process-dispatch@main
+      uses: fusioncoe/onfusioncoe-actions/process-dispatch@v0
       with:
         dispatch_action: 'Test Action'
 
