@@ -31,13 +31,18 @@ permissions:
 jobs:
   export-from-dev:
     runs-on: windows-latest
-    # or you can say runs-on: ubuntu-latest
+    # or you can say runs-on: ubuntu-latestS
     env:
       RUNNER_DEBUG: 1
 
     steps:
     #- name: Run Env
     #  run: env
+
+    - name: OnfusionCoe Dispatch
+      uses: fusioncoe/onfusioncoe-actions/process-dispatch@main
+      with:
+        dispatch_action: "Test Action"
 
     - uses: actions/checkout@v2
       with:
