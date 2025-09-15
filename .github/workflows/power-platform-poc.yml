@@ -37,12 +37,8 @@ jobs:
       RUNNER_DEBUG: 1
 
     steps:
-    - name: Use variables
-      run: |
-        echo "Environment URL : ${{inputs.environment_url}}"
-        echo "Client ID : {{vars.DEBUG_ORG_4_CLIENT_ID}}"
-        echo "Tenant ID : ${{vars.DEBUG_ORG_4_TENANT_ID}}"
-        echo "Microsoft Cloud : ${{vars.DEBUG_ORG_4_TENANT_CLOUD}} "       
+    - name: Run Env
+      run: env
 
     - uses: actions/checkout@v2
       with:
