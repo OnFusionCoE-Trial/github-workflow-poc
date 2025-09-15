@@ -1,0 +1,98 @@
+
+on:
+  workflow_dispatch:
+    inputs:
+        environment_url:
+            description: 'Environment URL'
+            required: true
+            type: string
+        solution_name:
+            description: 'Solution Name'
+            required: true
+            type: string            
+        entraid_sp_slug:
+            description: 'Prefix for Service Principal Environment Variables'
+            required: true
+            type: string
+
+env:
+#edit your values here
+  ENVIRONMENT_URL: ${{inputs.environment_url}}
+  CLIENT_ID: ${{vars.DEBUG_ORG_4_CLIENT_ID}}
+  TENANT_ID: ${{vars.DEBUG_ORG_4_TENANT_ID}}
+  CLIENT_SECRET: ${{vars.DEBUG_ORG_4_SECRET}}
+  MICROSOFT_CLOUD: ${{vars.DEBUG_ORG_4_TENANT_CLOUD}}  
+
+permissions:
+  contents: write
+
+jobs:
+  export-from-dev:
+    runs-on: windows-latest
+    # or you can say runs-on: ubuntu-latest
+    env:
+      RUNNER_DEBUG: 1
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: who-am-i action
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{env.ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ env.CLIENT_SECRET }}
+        tenant-id: ${{env.TENANT_ID}}
+        cloud: 
+
+    - name: publish-solution
+      uses: microsoft/powerplatform-actions/publish-solution@v0
+      with:
+        environment-url: ${{env.ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ env.CLIENT_SECRET }}
+        tenant-id: ${{env.TENANT_ID}}        
+
+    - name: export-solution action
+      uses: microsoft/powerplatform-actions/export-solution@v0
+      with:
+        environment-url: ${{env.ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ env.CLIENT_SECRET }}
+        tenant-id: ${{env.TENANT_ID}}
+        solution-name: ${{ github.event.inputs.solution_name }}
+        solution-output-file: .ostrata/${{ github.event.inputs.solution_name }}.zip
+
+    - name: export-solution action
+      uses: microsoft/powerplatform-actions/export-solution@v0
+      with:
+        environment-url: ${{env.ENVIRONMENT_URL}}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ env.CLIENT_SECRET }}
+        tenant-id: ${{env.TENANT_ID}}
+        managed: true
+        solution-name: ${{ github.event.inputs.solution_name }}
+        solution-output-file: .ostrata/${{ github.event.inputs.solution_name }}_managed.zip
+
+    - name: unpack-solution action
+      uses: microsoft/powerplatform-actions/unpack-solution@v0
+      with:
+        solution-file: .ostrata/${{ github.event.inputs.solution_name }}.zip
+        solution-folder: solution/meta/
+        solution-type: 'Both'
+        overwrite-files: true
+
+    - name: branch-solution, prepare it for a PullRequest
+      uses: microsoft/powerplatform-actions/branch-solution@v0
+      with:
+        solution-folder: ${{ github.event.inputs.solution_folder}}/${{ github.event.inputs.solution_name }}
+        solution-target-folder: ${{ github.event.inputs.solution_target_folder}}/${{ github.event.inputs.solution_name }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        allow-empty-commit: true
+
+    - name: Commit and push changes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "Automated commit by GitHub Actions"        
